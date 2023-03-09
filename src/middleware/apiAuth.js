@@ -4,12 +4,12 @@ import { User } from '../models';
 const jwt = require('jsonwebtoken');
 
 const apiAuth = async (req, res, next) => {
-  if (!(req.headers && req.headers['x-token'])) {
+  if (!(req.headers && req.header('Authorization'))) {
     return errorResponse(req, res, 'Token is not provided', 401);
   }
-  const token = req.headers['x-token'];
+  const token = req.header('Authorization').split('Bearer ')[1];
   try {
-    const decoded = jwt.verify(token, process.env.SECRET);
+    const decoded = jwt.verify(token, 'secret');
     req.user = decoded.user;
     const user = await User.scope('withSecretColumns').findOne({
       where: { email: req.user.email },
@@ -26,7 +26,7 @@ const apiAuth = async (req, res, next) => {
       req,
       res,
       'Incorrect token is provided, try re-login',
-      401,
+      401
     );
   }
 };

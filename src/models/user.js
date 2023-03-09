@@ -1,5 +1,3 @@
-
-
 module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define(
     'User',
@@ -21,32 +19,24 @@ module.exports = (sequelize, DataTypes) => {
       profilePic: {
         type: DataTypes.STRING,
       },
-      isAdmin: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: false,
-      },
       verifyToken: {
         type: DataTypes.STRING,
         defaultValue: null,
       },
-      isVerified: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: false,
-      },
     },
     {
       defaultScope: {
-        attributes: { exclude: ['password', 'verifyToken', 'isAdmin'] },
+        attributes: { exclude: ['password', 'verifyToken'] },
       },
       scopes: {
         withSecretColumns: {
-          attributes: { include: ['password', 'verifyToken', 'isAdmin'] },
+          attributes: { include: ['password', 'verifyToken'] },
         },
       },
-    },
+    }
   );
-  User.associate = function (models) {
-    // associations can be defined here
-  };
+  // User.associate = function (models) {
+  //   // associations can be defined here
+  // };
   return User;
 };
